@@ -80,11 +80,11 @@ public partial class DotExponential : DotBase
    计算方式：ΔT = -(log₂(min(0.005, 1 / d))) / r。
 3. 因此：初版 _timeScales[i] = MoveTime / ΔT，用于将 timeEffective 映射为
    指数缓动函数的采样时间，再计算 f(t) 作为当前路径段的 Lerp 插值比例。
-4. 为消除 UpdatePosition() 中每帧一次的乘法运算，终版数组中的所有元素均进行预计算，除以 ln2。
+4. 为消除 UpdatePosition() 中每帧一次的乘法运算，终版数组中的所有元素均进行除以 ln2 的预计算。
 
 流程示意图：
-动画时间 timeEffective -> 乘以 _timeScales[i] -> 指数缓动时间 (函数自变量) -> f(t) -> Lerp 插值比例
-Lerp 插值比例 -> 预运算，乘以 INV_LN2 -> 最终数组
+动画时间 timeEffective -> 乘以 _timeScales[i] -> 指数缓动时间 (函数自变量) -> 
+f(t) -> Lerp 插值比例 -> 预计算，乘以 INV_LN2 -> 最终数组
 */
 	private void BuildScaleTable()
 	{

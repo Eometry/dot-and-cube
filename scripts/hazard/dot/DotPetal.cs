@@ -17,11 +17,11 @@ public partial class DotPetal : DotBase
 	public float RotationDeg { get; set; } = 0f;
 
 	// ===== 内部变量 =====
-	private float _rotationRad;    // 旋转角度（弧度制）
-	private float _thetaPeriod;    // 几何闭合周期，θ 的最大取值
-	private float _periodScale;    // 周期缩放比例，等于 _thetaPeriod / _period
-	private float _phaseShiftRad;  // θ 初值，由 PhaseOffsetDeg 简单推导而来
-	private int _n;                // r = a cos(nθ) 中的参数 n
+	private float _rotationRad;   // 旋转角度（弧度制）
+	private float _thetaPeriod;   // 几何闭合周期，θ 的最大取值
+	private float _periodScale;   // 周期缩放比例，等于 _thetaPeriod / _period
+	private float _phaseShiftRad; // θ 初值，由 PhaseOffsetDeg 简单推导而来
+	private int _n;               // r = a cos(nθ) 中的参数 n
 
     protected override void Initialize()
     {
@@ -56,7 +56,7 @@ public partial class DotPetal : DotBase
     {
 		float theta = _periodScale * (float)_time + _phaseShiftRad;
 		float radius = MaxRadius * Mathf.Cos(_n * theta);
-		Vector2 direction = Vector2.FromAngle(_rotationRad + theta);
-		GlobalPosition = Center + direction * radius;
+		Vector2 dir = Vector2.FromAngle(_rotationRad + theta);
+		GlobalPosition = Center + dir * radius;
     }
 }
