@@ -1,16 +1,16 @@
 using Godot;
 
-public partial class PlayerVelocity : CharacterBody2D
+public partial class PlyVelocity : CharacterBody2D
 {
 	[Export] // 初始生成坐标
 	public Vector2 SpawnPoint = new(384f, 384f);
 	private float speed = 275.0f;
 
-    public override void _Ready()
-    {
-        GlobalPosition = SpawnPoint;
+	public override void _Ready()
+	{
+		GlobalPosition = SpawnPoint;
 		ZIndex = 255;
-    }
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
