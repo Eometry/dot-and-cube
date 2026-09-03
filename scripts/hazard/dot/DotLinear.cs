@@ -1,5 +1,4 @@
 using Godot;
-using System.Collections.Generic;
 
 public partial class DotLinear : DotBase
 {
@@ -24,12 +23,11 @@ public partial class DotLinear : DotBase
 	};
 
 	// ===== 内部变量 =====
-	private List<float> _cumulativeTimes = new(); // 累计时间表
-	//TODO：优化架构，作为数组声明而非列表
-	private float _distance;          // 累计距离
-	private float _timeForward;       // 正向时间，仅应用于 BackAndForth，等于半周期
-	private float _timeEffective;     // 有效时间，在 BackAndForth 的情况下使用三角波折叠映射进度
-	private int _currentSegmentIndex; // 当前线段指数，动点处于 Waypoints[i] 与 Waypoints[i+1] 的区间
+	private float[] _accTimes;    // 累计时间表
+	private float _accDist;       // 累计距离
+	private float _timeForward;   // 正向时间，仅应用于 BackAndForth，等于半周期
+	private float _timeEffective; // 有效时间，在 BackAndForth 的情况下使用三角波折叠映射进度
+	private int _currentSegIdx;   // 当前线段指数，动点处于 Waypoints[i] 与 Waypoints[i+1] 的区间
 
 	protected override void Initialize()
 	{
@@ -43,7 +41,7 @@ public partial class DotLinear : DotBase
 			GD.PrintErr("错误：速度必须大于 0。");
 			return;
 		}
-		_isValid = true; // 若能运行到这里，说明节点数、速度合法，继续运行
+		_isValid = true;
 		BuildTimetable();
 		if (_isValid) GlobalPosition = Waypoints[0];
 	}
@@ -51,9 +49,12 @@ public partial class DotLinear : DotBase
 	// 方法：建立时间表
 	private void BuildTimetable()
 	{
-		_cumulativeTimes.Clear();
-		_distance = 0f;
-		_cumulativeTimes.Add(0f); // 补上起始时间 0
+		_accDist = 0f;
+		int tableSize = PathMode == PathModes.ClosedLoop
+		? Waypoints.Length + 1
+		: Waypoints.Length; //时间表大小
+		_accTimes = new float[tableSize];
+		_accTimes[0] = 0f; // 起始时间 0
 		for (int i = 0; i < Waypoints.Length - 1; i++)
 		{
 			float segmentLength = Waypoints[i].DistanceTo(Waypoints[i + 1]);
@@ -63,8 +64,8 @@ public partial class DotLinear : DotBase
 				_isValid = false;
 				return;
 			}
-			_distance += segmentLength;
-			_cumulativeTimes.Add(_distance / Speed);
+			_accDist += segmentLength;
+			_accTimes[i + 1] = _accDist / Speed;
 		}
 		switch (PathMode)
 		{
@@ -76,13 +77,13 @@ public partial class DotLinear : DotBase
 					_isValid = false;
 					return;
 				}
-				_distance += Waypoints[Waypoints.Length - 1].DistanceTo(Waypoints[0]);
-				_cumulativeTimes.Add(_distance / Speed);
-				_period = _cumulativeTimes[_cumulativeTimes.Count - 1];
+				_accDist += Waypoints[Waypoints.Length - 1].DistanceTo(Waypoints[0]);
+				_accTimes[tableSize - 1] = _accDist / Speed;
+				_period = _accTimes[tableSize - 1];
 				break;
 
 			case PathModes.BackAndForth:
-				_timeForward = _distance / Speed;
+				_timeForward = _accDist / Speed;
 				_period = _timeForward * 2f;
 				break;
 
@@ -96,15 +97,15 @@ public partial class DotLinear : DotBase
 	// 方法：更新当前线段指数
 	private void UpdateSegmentIndex()
 	{
-		while (_currentSegmentIndex < _cumulativeTimes.Count - 2 && _timeEffective > _cumulativeTimes[_currentSegmentIndex + 1])
+		while (_currentSegIdx < _accTimes.Length - 2 && _timeEffective > _accTimes[_currentSegIdx + 1])
 		{
-			_currentSegmentIndex += 1;
+			_currentSegIdx += 1;
 		}
 		if (PathMode == PathModes.BackAndForth)
 		{
-			while (_currentSegmentIndex > 0 && _timeEffective < _cumulativeTimes[_currentSegmentIndex])
+			while (_currentSegIdx > 0 && _timeEffective < _accTimes[_currentSegIdx])
 			{
-				_currentSegmentIndex -= 1;
+				_currentSegIdx -= 1;
 			}
 		}
 	}
@@ -116,7 +117,7 @@ public partial class DotLinear : DotBase
 		switch (PathMode)
 		{
 			case PathModes.ClosedLoop:
-				_timeEffective = (float)_time; // 闭环不需要折叠，直接用
+				_timeEffective = (float)_time; // 闭环不需要折叠，直接使用
 				break;
 			case PathModes.BackAndForth:
 				_timeEffective = (_time <= _timeForward) ? (float)_time : (_period - (float)_time);
@@ -125,18 +126,17 @@ public partial class DotLinear : DotBase
 		// 先更新当前线段指数
 		UpdateSegmentIndex();
 		// 始/末路径点坐标
-		Vector2 startPoint = Waypoints[_currentSegmentIndex];
-		Vector2 endPoint = Waypoints[(_currentSegmentIndex + 1) % Waypoints.Length];
+		Vector2 startPoint = Waypoints[_currentSegIdx];
+		Vector2 endPoint = Waypoints[(_currentSegIdx + 1) % Waypoints.Length]; // 取模防止浮点误差导致时间表上界溢出
 		// 插值比例
-		float segmentProgress = (_timeEffective - _cumulativeTimes[_currentSegmentIndex]) / 
-			(_cumulativeTimes[_currentSegmentIndex + 1] - _cumulativeTimes[_currentSegmentIndex]);
+		float segmentProgress = (_timeEffective - _accTimes[_currentSegIdx]) / 
+			(_accTimes[_currentSegIdx + 1] - _accTimes[_currentSegIdx]);
 
 		GlobalPosition = startPoint.Lerp(endPoint, segmentProgress);
 	}
 
     protected override void OnPeriodReset()
     {
-        _currentSegmentIndex = 0;
+        _currentSegIdx = 0;
     }
-
 }
