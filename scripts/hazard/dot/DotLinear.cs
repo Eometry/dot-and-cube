@@ -95,7 +95,7 @@ public partial class DotLinear : DotBase
 	}
 
 	// 方法：更新当前线段指数
-	private void UpdateSegmentIndex()
+	private void UpdateSegIdx()
 	{
 		while (_currentSegIdx < _accTimes.Length - 2 && _timeEffective > _accTimes[_currentSegIdx + 1])
 		{
@@ -124,7 +124,7 @@ public partial class DotLinear : DotBase
 				break;
 		}
 		// 先更新当前线段指数
-		UpdateSegmentIndex();
+		UpdateSegIdx();
 		// 始/末路径点坐标
 		Vector2 startPoint = Waypoints[_currentSegIdx];
 		Vector2 endPoint = Waypoints[(_currentSegIdx + 1) % Waypoints.Length]; // 取模防止浮点误差导致时间表上界溢出
