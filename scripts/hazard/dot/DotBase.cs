@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class DotBase : Node2D
+public partial class DotBase : Node2D, IHazard
 {
 	protected const float INV_LN2 = 1.442695f; // 1 / ln(2)
 	protected double _time = 0.0;              // 内部时间
