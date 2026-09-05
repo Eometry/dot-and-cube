@@ -7,8 +7,9 @@
 | Abbr. | Full Term | 含义 |
 | :--- | :--- | :--- |
 | `ply` | player | 玩家 |
+| `lv` | level | 关卡 |
 
-### 2. 变量核心名词 Core Nouns
+### 2. 核心名词 Core Nouns
 | Abbr. | Full Term | 含义 |
 | :--- | :--- | :--- |
 | `dir` | direction | 方向/方向向量 |
@@ -16,6 +17,7 @@
 | `idx` | index | 索引 |
 | `pos` | position | 空间位置 |
 | `seg` | segment | 线段 |
+| `col` | collision | 碰撞（体积） |
 
 ### 3. 修饰词 Modifiers
 | Abbr. | Full Term | 含义 |
@@ -55,6 +57,7 @@
 | 方法 | `PascalCase` | `void UpdateSegIdx()` |
 | Godot 内置虚方法 | `_PascalCase` | `override void _Ready()` |
 | 属性 | `PascalCase` | `[Export] public float Speed` |
+| 节点 | `PascalCase` | `Sprite2D CubeSprite` |
 | 局部变量 | `camelCase` | `int currentSegIdx` |
 | 参数 | `camelCase` | `double delta` |
 | 私有字段 | `_camelCase` | `private float[] _accTimes` |
