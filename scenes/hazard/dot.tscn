@@ -18,19 +18,22 @@ script = ExtResource("1_2ru8d")
 [node name="Dot" type="Sprite2D" parent="." unique_id=1655216558]
 texture = ExtResource("2_ntgtk")
 
-[node name="Area2D" type="Area2D" parent="Dot" unique_id=564099289]
+[node name="HazardArea" type="Area2D" parent="Dot" unique_id=564099289]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Dot/Area2D" unique_id=1464794294]
+[node name="HazardColBox" type="CollisionShape2D" parent="Dot/HazardArea" unique_id=1464794294]
 shape = SubResource("CircleShape2D_8gj63")
 
 [node name="GrazeCircle" type="Sprite2D" parent="." unique_id=283879415]
 texture = ExtResource("3_jv5v3")
 script = ExtResource("4_ntgtk")
 
-[node name="Area2D" type="Area2D" parent="GrazeCircle" unique_id=734038323]
+[node name="GrazeArea" type="Area2D" parent="GrazeCircle" unique_id=734038323]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="GrazeCircle/Area2D" unique_id=1807763168]
+[node name="GrazeColBox" type="CollisionShape2D" parent="GrazeCircle/GrazeArea" unique_id=1807763168]
 shape = SubResource("CircleShape2D_3owqy")
 
 [node name="GrazeSnd" type="AudioStreamPlayer2D" parent="GrazeCircle" unique_id=286904994]
 stream = ExtResource("5_jv5v3")
+max_distance = 64.0
+attenuation = 0.0
+panning_strength = 100.0

@@ -12,12 +12,14 @@ public partial class GrazeCircle : Sprite2D
 
     public override void _Ready()
     {
-        // 获取子节点 Area2D 作为擦弹碰撞箱
-        var grazeArea = GetNode<Area2D>("Area2D");
+        // 获取子节点 GrazeArea 作为擦弹碰撞箱
+        var grazeArea = GetNode<Area2D>("GrazeArea");
         // 连接 Area2D 信号
         grazeArea.BodyEntered += OnGrazeCircleEntered;
         grazeArea.BodyExited  += OnGrazeCircleExited;
+        // 获取子节点 GrazeSnd 并加固其 PanningStrength 属性
         _grazeSnd = GetNode<AudioStreamPlayer2D>("GrazeSnd");
+        _grazeSnd.PanningStrength = 80.0f;
 		// 初始不透明度设置为 0
 		Modulate = TRANSPARENT;
         // 隐藏以降低渲染压力

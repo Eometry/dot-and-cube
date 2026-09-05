@@ -33,7 +33,8 @@ public partial class DotBase : Node2D, IHazard
 	// 方法：特殊的周期重置（周期重置时执行）
 	protected virtual void OnPeriodReset()
 	{
-		// （可选）=====子类重写此虚方法，以处理周期循环的特殊逻辑=====
+		// （可选）
+		// =====子类重写此虚方法，以处理周期循环的特殊逻辑=====
 	}
 
 	// 方法：通用物理过程

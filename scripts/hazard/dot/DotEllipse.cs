@@ -1,4 +1,5 @@
 using Godot;
+
 public partial class DotEllipse : DotBase
 {
     // ===== 导出参数 =====
