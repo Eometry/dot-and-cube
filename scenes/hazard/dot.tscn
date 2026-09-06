@@ -36,4 +36,4 @@ shape = SubResource("CircleShape2D_3owqy")
 stream = ExtResource("5_jv5v3")
 max_distance = 64.0
 attenuation = 0.0
-panning_strength = 100.0
+panning_strength = 80.0

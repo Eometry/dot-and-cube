@@ -18,6 +18,7 @@
 | `pos` | position | 空间位置 |
 | `seg` | segment | 线段 |
 | `col` | collision | 碰撞（体积） |
+| `rng` | random number generator | 随机数生成器 |
 
 ### 3. 修饰词 Modifiers
 | Abbr. | Full Term | 含义 |

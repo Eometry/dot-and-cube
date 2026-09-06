@@ -69,7 +69,7 @@ public partial class DotExponential : DotBase
 	// 方法：建立缩放系数表
 /*
 数组 float[] _timeScales 用于建立动画时间到指数缓动函数时间定义域的映射。
-1. 指数缓动函数 f(t) = 1 - 2^(-r × t) 的自然定义域为 t ∈ [0, +∞)，
+1. 指数缓动函数 f(t) = 1 - 2 ^ (-r × t) 的自然定义域为 t ∈ [0, +∞)，
    f(0) = 0，随着 t → +∞，f(t) → 1，故函数本身作为当前径段进程的 Lerp 插值比例使用。
    而游戏中每段运动的持续时间固定为 MoveTime。因此，需要为每个路径段建立一个时间映射，
    将每条径段上的等效运动时间 timeEffective ∈ [0, MoveTime]
