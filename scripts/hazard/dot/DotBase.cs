@@ -11,7 +11,7 @@ public partial class DotBase : Node2D, IHazard
 		Initialize();
 	}
 
-	// 方法：初始化（由 _Ready() 调用一次）
+	// 虚方法：初始化（由 _Ready() 调用一次）
 	protected virtual void Initialize()
 	{
 		/*
@@ -24,20 +24,20 @@ public partial class DotBase : Node2D, IHazard
 		*/
 	}
 
-	// 方法：更新坐标（每帧执行）
+	// 虚方法：更新坐标（每帧执行）
 	protected virtual void UpdatePosition()
 	{
 		// =====子类重写此虚方法，实现运动逻辑=====
 	}
 	
-	// 方法：特殊的周期重置（周期重置时执行）
+	// 虚方法：特殊的周期重置（周期重置时执行）
 	protected virtual void OnPeriodReset()
 	{
 		// （可选）
 		// =====子类重写此虚方法，以处理周期循环的特殊逻辑=====
 	}
 
-	// 方法：通用物理过程
+	// Godot 方法：通用物理过程
 	public override void _PhysicsProcess(double delta)
 	{
 		if (!_isValid) return;
@@ -51,5 +51,11 @@ public partial class DotBase : Node2D, IHazard
 		}
 
 		UpdatePosition();
+	}
+
+	// 接口实现方法：Hazard 类接触到玩家
+	public void OnPlyContact()
+	{
+		
 	}
 }
