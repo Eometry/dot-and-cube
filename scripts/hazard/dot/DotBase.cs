@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class DotBase : Node2D, IHazard
+public partial class DotBase : Hazard
 {
 	protected const float INV_LN2 = 1.442695f; // 1 / ln(2)
 	protected double _time = 0.0;              // 内部时间
@@ -51,11 +51,5 @@ public partial class DotBase : Node2D, IHazard
 		}
 
 		UpdatePosition();
-	}
-
-	// 接口实现方法：Hazard 类接触到玩家
-	public void OnPlyContact()
-	{
-		
 	}
 }

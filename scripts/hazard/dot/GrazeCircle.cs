@@ -2,14 +2,14 @@ using Godot;
 
 public partial class GrazeCircle : Sprite2D
 {
-    private Tween _grazeTween;              // 渐隐动画 Tween 对象
-    private AudioStreamPlayer2D _grazeSnd;  // 擦弹音效
-    private RandomNumberGenerator _rng;     // 音高随机数
-    private bool _isGrazed = false;         // 是否擦弹
-    private const float EXIT_DELAY = 0.05f; // 从擦弹碰撞结束到渐隐动画开始之前的延迟时间
-    private const float FADE_TIME = 0.25f;  // 渐隐动画的持续时间
-    private const float PITCH_MIN = 0.80f;  // 最小随机音高
-    private const float PITCH_MAX = 1.25f;  // 最大随机音高
+    private Tween _grazeTween;               // 渐隐动画 Tween 对象
+    private AudioStreamPlayer2D _grazeSnd;   // 擦弹音效
+    private RandomNumberGenerator _rngPitch; // 音高随机数
+    private bool _isGrazed = false;          // 是否擦弹
+    private const float EXIT_DELAY = 0.05f;  // 从擦弹碰撞结束到渐隐动画开始之前的延迟时间
+    private const float FADE_TIME = 0.25f;   // 渐隐动画的持续时间
+    private const float PITCH_MIN = 0.80f;   // 最小随机音高
+    private const float PITCH_MAX = 1.25f;   // 最大随机音高
     private static readonly Color TRANSPARENT = new(1, 1, 1, 0); // 透明
     private static readonly Color OPAQUE = new(1, 1, 1, 1);      // 不透明
 
@@ -28,8 +28,8 @@ public partial class GrazeCircle : Sprite2D
         // 隐藏以降低渲染压力
         Visible = false;
         // 初始化随机数生成器
-        _rng = new RandomNumberGenerator();
-        _rng.Randomize();
+        _rngPitch = new RandomNumberGenerator();
+        _rngPitch.Randomize();
     }
 
     // 方法：处理玩家进入擦弹圈事件
@@ -39,7 +39,7 @@ public partial class GrazeCircle : Sprite2D
         {
             _isGrazed = true;
             // 设定随机音高并播放
-            _grazeSnd.PitchScale = _rng.RandfRange(PITCH_MIN, PITCH_MAX);
+            _grazeSnd.PitchScale = _rngPitch.RandfRange(PITCH_MIN, PITCH_MAX);
             _grazeSnd.Play();
 
             PlayGhostEffect();
