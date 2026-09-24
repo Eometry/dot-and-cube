@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class DotExponential : DotBase
+public partial class DotExp : DotBase
 {
 	// ===== 导出参数 =====
 	[Export] // 运动时间
@@ -27,10 +27,10 @@ public partial class DotExponential : DotBase
 	};
 
 	// ===== 内部变量 =====
-	private float[] _timeScales;      // 时间缩放系数表
-	private float _stepTime;          // 每步（径段）时间，等于 MoveTime + WaitTime
-	private int _totalSegment;        // 总径段数，等于数组 _timeScales 的元素个数
-	private int _currentSegmentIndex; // 当前径段索引，动点处于 Waypoints[i] 与 Waypoints[i+1] 的区间
+	private float[] _timeScales; // 时间缩放系数表
+	private float _stepTime;     // 每步（径段）时间，等于 MoveTime + WaitTime
+	private int _totalSeg;       // 总径段数，等于数组 _timeScales 的元素个数
+	private int _currentSegIdx;  // 当前径段索引，动点处于 Waypoints[i] 与 Waypoints[i+1] 的区间
 
 	protected override void Initialize()
 	{
@@ -46,14 +46,14 @@ public partial class DotExponential : DotBase
 		}
 		_isValid = true;
 
-		_totalSegment = PathMode == PathModes.ClosedLoop
+		_totalSeg = PathMode == PathModes.ClosedLoop
     		? Waypoints.Length
     		: 2 * (Waypoints.Length - 1);
-		_timeScales = new float[_totalSegment];
+		_timeScales = new float[_totalSeg];
 
 		_stepTime = MoveTime + WaitTime;
-		_period = _stepTime * _totalSegment;
-		_currentSegmentIndex = 0;
+		_period = _stepTime * _totalSeg;
+		_currentSegIdx = 0;
 
 		BuildScaleTable();
 		if (_isValid) GlobalPosition = Waypoints[0];
@@ -68,6 +68,7 @@ public partial class DotExponential : DotBase
 
 	// 方法：建立缩放系数表
 /*
+TLDR：_timeScales 是保证 MoveTime 结束后终点误差不超过 1 px 的数组。
 数组 float[] _timeScales 用于建立动画时间到指数缓动函数时间定义域的映射。
 1. 指数缓动函数 f(t) = 1 - 2 ^ (-r × t) 的自然定义域为 t ∈ [0, +∞)，
    f(0) = 0，随着 t → +∞，f(t) → 1，故函数本身作为当前径段进程的 Lerp 插值比例使用。
@@ -80,7 +81,7 @@ public partial class DotExponential : DotBase
    计算方式：ΔT = -(log₂(min(0.005, 1 / d))) / r。
 3. 因此：初版 _timeScales[i] = MoveTime / ΔT，用于将 timeEffective 映射为
    指数缓动函数的采样时间，再计算 f(t) 作为当前路径段的 Lerp 插值比例。
-4. 为消除 UpdatePosition() 中每帧一次的乘法运算，终版数组中的所有元素均进行除以 ln2 的预计算。
+4. 为消除 UpdatePosition() 中每帧一次的乘法运算，终版数组中的所有元素均进行乘以 INV_LN2 的预计算。
 
 流程示意图：
 动画时间 timeEffective -> 乘以 _timeScales[i] -> 指数缓动时间 (函数自变量) -> 
@@ -152,32 +153,32 @@ WaitTime 并不会冻结指数函数。动画在 MoveTime 后仍继续采样指�
 		// 首先更新当前径段索引
 		UpdateSegmentIndex();
 		// 始/末路径点坐标
-		Vector2 startPoint = new(0f, 0f);
-		Vector2 endPoint = new(0f, 0f);
+		Vector2 startPoint = Vector2.Zero;
+		Vector2 endPoint   = Vector2.Zero;
 		// 径段上的有效时间
-		float timeEffective = (float)_time - _currentSegmentIndex * _stepTime;
+		float timeEffective = (float)_time - _currentSegIdx * _stepTime;
 		// 插值比例
-		float segmentProgress = 0f;
+		float segProg;
 		switch (PathMode)
 		{
 			case PathModes.ClosedLoop:
-				startPoint = Waypoints[_currentSegmentIndex];
-				endPoint = Waypoints[(_currentSegmentIndex + 1) % Waypoints.Length];
+				startPoint = Waypoints[_currentSegIdx];
+				endPoint = Waypoints[(_currentSegIdx + 1) % Waypoints.Length];
 			break;
 
 			case PathModes.BackAndForth:
 				int index;
-				if (_currentSegmentIndex < Waypoints.Length - 1)
+				if (_currentSegIdx < Waypoints.Length - 1)
     			{
         			// 正向
-        			index = _currentSegmentIndex;
+        			index = _currentSegIdx;
         			startPoint = Waypoints[index];
         			endPoint = Waypoints[index + 1];
     			}
     			else
     			{
         			// 返向：镜像映射
-        			index = _totalSegment - 1 - _currentSegmentIndex;
+        			index = _totalSeg - 1 - _currentSegIdx;
         			startPoint = Waypoints[index + 1];
         			endPoint = Waypoints[index];
     			}
@@ -185,13 +186,13 @@ WaitTime 并不会冻结指数函数。动画在 MoveTime 后仍继续采样指�
 		}
 		// 计算插值比例 r = 1 - 2 ^ (-r × (MoveTime / ΔT) × timeEffective)
 		// 数学上 2 ^ (−x) 等价于 e ^ (−x × ln2)，后者在底层少一次通用幂运算。
-		segmentProgress = 1f - Mathf.Exp(-DecayRate * timeEffective / _timeScales[_currentSegmentIndex]);
-		GlobalPosition = startPoint.Lerp(endPoint, segmentProgress);
+		segProg = 1f - Mathf.Exp(-DecayRate * timeEffective / _timeScales[_currentSegIdx]);
+		GlobalPosition = startPoint.Lerp(endPoint, segProg);
 	}
 
 	// 方法：更新当前径段索引
 	private void UpdateSegmentIndex()
 	{
-		_currentSegmentIndex = (int)(_time / _stepTime);
+		_currentSegIdx = (int)(_time / _stepTime);
 	}
 }

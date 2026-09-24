@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dkg1a2virqtc7"]
+
+[ext_resource type="PackedScene" uid="uid://bqdsyoy2waoba" path="res://scenes/hazard/dot.tscn" id="1_epf8p"]
+[ext_resource type="Script" uid="uid://b4p0op5c60ro5" path="res://scripts/hazard/dot/DotPow.cs" id="2_epf8p"]
+
+[node name="DotBase" unique_id=1777528774 instance=ExtResource("1_epf8p")]
+script = ExtResource("2_epf8p")
+Power = 3
+MoveTime = 2.0
+WaitTime = 0.01
+PathMode = 1
+Waypoints = PackedVector2Array(350, 200, 200, 459.81, 500, 459.81)
