@@ -33,7 +33,7 @@ public partial class DotSine : DotBase
 		_angularVelocity = Mathf.Tau / _period;
 		// 初相位弧度
 		_phaseOffsetRad = Mathf.DegToRad(PhaseOffsetDeg);
-		// 旋转角弧度s
+		// 旋转角弧度
 		float rotationRad = Mathf.DegToRad(RotationDeg);
 		// 方向向量
 		(float sinValue, float cosValue) = Mathf.SinCos(rotationRad);

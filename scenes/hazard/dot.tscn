@@ -22,6 +22,7 @@ texture = ExtResource("2_ntgtk")
 
 [node name="HazardColBox" type="CollisionShape2D" parent="Dot/HazardArea" unique_id=1464794294]
 shape = SubResource("CircleShape2D_8gj63")
+debug_color = Color(1, 0, 0, 0.39215687)
 
 [node name="GrazeCircle" type="Sprite2D" parent="." unique_id=283879415]
 texture = ExtResource("3_jv5v3")
@@ -31,6 +32,7 @@ script = ExtResource("4_ntgtk")
 
 [node name="GrazeColBox" type="CollisionShape2D" parent="GrazeCircle/GrazeArea" unique_id=1807763168]
 shape = SubResource("CircleShape2D_3owqy")
+debug_color = Color(0, 0.627451, 0.6901961, 0.19607843)
 
 [node name="GrazeSnd" type="AudioStreamPlayer2D" parent="GrazeCircle" unique_id=286904994]
 stream = ExtResource("5_jv5v3")

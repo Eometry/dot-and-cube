@@ -15,6 +15,7 @@
 | `dir` | direction | 方向/方向向量 |
 | `dist` | distance | 距离 |
 | `idx` | index | 索引 |
+| `prog` | progress | 进度 |
 | `pos` | position | 空间位置 |
 | `seg` | segment | 线段 |
 | `col` | collision | 碰撞（体积） |
@@ -31,6 +32,7 @@
 | `log` | logarithm | 对数 |
 | `ln` | natural logarithm | 自然对数 |
 | `exp` | exponential | 指数 |
+| `pow` | power | 幂 |
 | `acc` | accumulated | 累计量 |
 
 ### 4. 单位与量纲 Units & Dimensions
@@ -67,3 +69,5 @@
 | 文件夹 | `snake_case` | `scripts/` |
 | 场景文件 | `snake_case` | `test_room.tscn` |
 | 资源文件 | `snake_case` | `snd_explosion.wav` |
+
+所有 Hazard 类的危险判定碰撞箱的 Area2D 节点均需要命名为 HazardArea。

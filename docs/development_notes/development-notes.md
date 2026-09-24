@@ -28,3 +28,6 @@
 - `Dot` 基类下新增 `GrazeCircle`（擦弹圈）机制；
 - 新增 `Dot` 类：`DotPetal`（暂为框架，未完成调试）；
 - 新建 `DEVELOPMENT_NOTES.md`。
+
+## 2026/08/01
+- 正式加入了 `DotPetal`。
