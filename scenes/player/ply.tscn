@@ -15,6 +15,12 @@ texture = ExtResource("2_kbsbm")
 
 [node name="OuterColBox" type="CollisionShape2D" parent="." unique_id=168625852]
 shape = SubResource("RectangleShape2D_3owqy")
+debug_color = Color(0, 0.43529412, 0.69803923, 0.39215687)
+
+[node name="InnerArea" type="Area2D" parent="." unique_id=423565097]
+
+[node name="InnerColBox" type="CollisionPolygon2D" parent="InnerArea" unique_id=2030585505]
+polygon = PackedVector2Array(5, 16, 16, 5, 16, -5, 5, -16, -5, -16, -16, -5, -16, 5, -5, 16)
 
 [node name="PlyCamera" type="Camera2D" parent="." unique_id=533934793]
 limit_left = 0

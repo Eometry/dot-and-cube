@@ -4,6 +4,7 @@ public partial class PlyVelocity : PlyBase
 {
 	protected override void Initialize()
 	{
+		base.Initialize();
 		GlobalPosition = SpawnPoint;
 		ZIndex = 511;
 	}
