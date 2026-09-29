@@ -28,6 +28,7 @@ public partial class DotPow : DotBase
 	// ===== 内部变量 =====
 	private float _stepTime;      // 每步（径段）时间，等于 MoveTime + WaitTime
 	private int _totalSeg;        // 总径段数，等于数组 _timeScales 的元素个数
+	private int _halfTotalSeg;    // _totalSeg 的一半，仅应用于 BackAndForth 下 start/end-point 的分段计算
 	private float _timeForward;   // 正向时间，仅应用于 BackAndForth，等于半周期
 	private float _timeEffective; // 有效时间，在 BackAndForth 的情况下使用三角波折叠映射进度
 	private int _currentSegIdx;   // 当前径段索引，动点处于 Waypoints[i] 与 Waypoints[i+1] 的区间
@@ -75,16 +76,17 @@ public partial class DotPow : DotBase
 		}
         _currentSegIdx = (int)(_timeEffective / _stepTime) % _totalSeg;
 		
+		// _currentSegIdx % _halfTotalSeg 永远落在 [0, n−2]，杜绝索引越界（?）
 		Vector2 startpoint = PathMode == PathModes.ClosedLoop
 			? Waypoints[_currentSegIdx]
-			: _currentSegIdx < _totalSeg / 2
-				? Waypoints[_currentSegIdx % (_totalSeg / 2)]
-				: Waypoints[_currentSegIdx % (_totalSeg / 2) + 1];
+			: _currentSegIdx < _halfTotalSeg
+				? Waypoints[_currentSegIdx % _halfTotalSeg]
+				: Waypoints[_currentSegIdx % _halfTotalSeg + 1];
 		Vector2 endpoint = PathMode == PathModes.ClosedLoop
 			? Waypoints[(_currentSegIdx + 1) % _totalSeg]
-			: _currentSegIdx < _totalSeg / 2
-				? Waypoints[_currentSegIdx % (_totalSeg / 2) + 1]
-				: Waypoints[_currentSegIdx % (_totalSeg / 2)];
+			: _currentSegIdx < _halfTotalSeg
+				? Waypoints[_currentSegIdx % _halfTotalSeg + 1]
+				: Waypoints[_currentSegIdx % _halfTotalSeg];
 				float segTime = _timeEffective - _stepTime * _currentSegIdx;
 /*
 插值比例 segProg 为三段分段函数 s(t)，其中 s 为segProg，t 为 segTime / MoveTime，n 为 Power：

@@ -5,8 +5,3 @@
 
 [node name="DotBase" unique_id=1777528774 instance=ExtResource("1_epf8p")]
 script = ExtResource("2_epf8p")
-Power = 3
-MoveTime = 2.0
-WaitTime = 0.01
-PathMode = 1
-Waypoints = PackedVector2Array(350, 200, 200, 459.81, 500, 459.81)
