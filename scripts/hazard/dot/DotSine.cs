@@ -15,9 +15,9 @@ public partial class DotSine : DotBase
 	public float RotationDeg { get; set; } = 0f;
 
 	// ===== 内部变量 =====
-	private Vector2 _motionAxis;    // 方向向量（乘以振幅）
-	private float _angularVelocity; // 角速度
-	private float _phaseOffsetRad;  // 初相位（弧度制）
+	private Vector2 _dir;          // 方向向量（乘以振幅）
+	private float _omega;          // 三角函数角速度
+	private float _phaseOffsetRad; // 初相位（弧度制）
 
 	protected override void Initialize()
 	{
@@ -30,24 +30,24 @@ public partial class DotSine : DotBase
 		_period = Period;
 
 		// 计算角速度 ω = 2π / T
-		_angularVelocity = Mathf.Tau / _period;
+		_omega = Mathf.Tau / _period;
 		// 初相位弧度
 		_phaseOffsetRad = Mathf.DegToRad(PhaseOffsetDeg);
 		// 旋转角弧度
 		float rotationRad = Mathf.DegToRad(RotationDeg);
 		// 方向向量
 		(float sinValue, float cosValue) = Mathf.SinCos(rotationRad);
-		_motionAxis = new(cosValue, sinValue);
-		_motionAxis *= Amplitude;
+		_dir = new(cosValue, sinValue);
+		_dir *= Amplitude;
 		// 按照初相位设置初始位置
 		float initialRotation = Mathf.Sin(_phaseOffsetRad);
-		
-		GlobalPosition = Center + _motionAxis * initialRotation;
+
+		GlobalPosition = Center + _dir * initialRotation;
 	}
 
 	// 方法：更新坐标
 	protected override void UpdatePosition()
 	{
-		GlobalPosition = Center + _motionAxis * Mathf.Sin((float)(_angularVelocity * _time + _phaseOffsetRad));
+		GlobalPosition = Center + _dir * Mathf.Sin((float)(_omega * _time + _phaseOffsetRad));
 	}
 }
