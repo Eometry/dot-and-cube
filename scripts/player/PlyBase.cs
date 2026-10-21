@@ -13,7 +13,7 @@ public partial class PlyBase : CharacterBody2D
 	protected Tween _hurtTween;             // 受击动画 Tween 对象
 	protected Tween _jumpTween;             // 跳跃动画 Tween 对象
 	protected AudioListener2D _sndReceiver; // 2D 音效接收器
-	protected const float FUNCTION_CONST = 4f / 65025f;           // 计算 scaleScale 的二次函数系数
+	protected const float FUNCTION_CONST = -1f / 65025f;           // 计算 scaleScale 的二次函数系数
 	protected static readonly Color OPAQUE = new(1, 1, 1, 1);     // 不透明
 	protected static readonly Color TRANSPARENT= new(1, 1, 1, 0); // 透明
 	protected static readonly Color HURT = new(1, 0.3f, 0.3f, 1); // 暗红
@@ -38,43 +38,49 @@ public partial class PlyBase : CharacterBody2D
 		GD.Print("玩家扣血！！！");
 		// 获得 1.5 秒的无敌时间
 		_isInvincible = true;
-		Invincible();
+		InvincibleVfx();
 		GetTree().CreateTimer(1.5).Timeout += () =>	_isInvincible = false;
 	}
 	
 	// 方法：进入无敌时间
-	private void Invincible()
+	private void InvincibleVfx()
 	{
+		_hurtTween?.Kill();
 		_hurtTween = CreateTween();
 		for (int i = 0; i < 29; i++)
 		{
-		// BUG：执行所有 TweenProperty() 方法时必定同时瞬时发生，导致根本不呈现动画效果；但是以前这么写的没这个问题。
 		_hurtTween.TweenProperty(this, "modulate", TRANSPARENT, 0.025);
 		_hurtTween.TweenProperty(this, "modulate", HURT, 0.025);
 		}
 		_hurtTween.TweenProperty(this, "modulate", OPAQUE, 0.05);
-		_hurtTween.Kill();
 	}
 
 	// 方法：跳跃
 	private void Jump()
 	{
-		float scaleScale = 0f;
+		if (_isOffGround) return;
+		_isOffGround = true;
+		Vector2 scaleScale = Vector2.Zero;
+		
 		_distOffGround = 0;
-		_jumpTween.Kill();
-		// 跳跃从起跳到落回用时 1.28 秒；_distOffGround 在此期间匀速增至最高点再折回
-		// y = 1 + 4x (255 - x) / 65025
+		_jumpTween?.Kill();
+		_jumpTween = CreateTween();
+		// 跳跃从起跳到落回用时 1.02 秒；_distOffGround 在此期间匀速增至最高点再折回
+		// y = 2 - (255 - x)² / 65025
+		float t;
 		for (_distOffGround = 0 ; _distOffGround < 255; _distOffGround++)
 		{
-			scaleScale = 1f + _distOffGround * (255 - _distOffGround) * FUNCTION_CONST;
-			_jumpTween.TweenProperty(this, "scale", scaleScale, 0.0025);
+			t = 2f + (255 - _distOffGround) * (255 - _distOffGround) * FUNCTION_CONST;
+			scaleScale = new(t, t);
+			_jumpTween.TweenProperty(this, "scale", scaleScale, 0.002);
 		}
 		for (_distOffGround = 255 ; _distOffGround > 0; _distOffGround--)
 		{
-			scaleScale = 1f + _distOffGround * (255 - _distOffGround) * FUNCTION_CONST;
-			_jumpTween.TweenProperty(this, "scale", scaleScale, 0.0025);
+			t = 2f + (255 - _distOffGround) * (255 - _distOffGround) * FUNCTION_CONST;
+			scaleScale = new(t, t);
+			_jumpTween.TweenProperty(this, "scale", scaleScale, 0.002);
 		}
-		_distOffGround = 0;
+		_jumpTween.TweenCallback(Callable.From(() => { _isOffGround = false; _distOffGround = 0; }));
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -85,7 +91,7 @@ public partial class PlyBase : CharacterBody2D
 		if (Input.IsActionPressed("ui_right")) velocity.X += 1;
 		if (Input.IsActionPressed("ui_up"))    velocity.Y -= 1;
 		if (Input.IsActionPressed("ui_down"))  velocity.Y += 1;
-		if (Input.IsKeyPressed(Key.Z))         Jump();
+		if (Input.IsActionJustPressed("confirm&jump")) Jump();
 
 		if (velocity != Vector2.Zero)
 		{
