@@ -6,6 +6,7 @@ public partial class GrazeCircle : Sprite2D
     private AudioStreamPlayer2D _grazeSnd;   // 擦弹音效
     private RandomNumberGenerator _rngPitch; // 音高随机数
     private bool _isGrazed = false;          // 是否擦弹
+    private byte _displayMask = 0b00000001;  // 显示位掩码，从最后到最前分别是 Ply，……
     private const float EXIT_DELAY = 0.05f;  // 从擦弹碰撞结束到渐隐动画开始之前的延迟时间
     private const float FADE_TIME = 0.25f;   // 渐隐动画的持续时间
     private const float PITCH_MIN = 0.80f;   // 最小随机音高

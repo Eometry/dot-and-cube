@@ -18,7 +18,7 @@ public partial class DotPetal : DotBase
 
 	// ===== 内部变量 =====
 	private float _rotationRad;   // 旋转角度（弧度制）
-	private float _thetaPeriod;   // 几何闭合周期，θ 的最大取值
+	private float _thetaPeriod;   // 几何闭合周期，θ 的最大取值，花瓣数为奇数为 π，偶数为 2π
 	private float _periodScale;   // 周期缩放比例，等于 _thetaPeriod / _period
 	private float _phaseShiftRad; // θ 初值，由 PhaseOffsetDeg 简单推导而来
 	private int _n;               // r = a cos(nθ) 中的参数 n

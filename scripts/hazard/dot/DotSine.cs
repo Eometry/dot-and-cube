@@ -3,7 +3,7 @@ using Godot;
 public partial class DotSine : DotBase
 {
 	// ===== 导出参数 =====
-	[Export] // 平衡中心
+	[Export] // 平衡中心坐标
 	public Vector2 Center { get; set; } = new(200f, 200f);
 	[Export] // 振幅
 	public float Amplitude { get; set; } = 120f;

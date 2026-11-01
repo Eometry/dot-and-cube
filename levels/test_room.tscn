@@ -15,6 +15,7 @@ position = Vector2(1024, 1024)
 texture = ExtResource("1_atxtc")
 
 [node name="Ply" parent="." unique_id=1250115198 instance=ExtResource("6_np6ep")]
+JumpTime = 0.75
 
 [node name="DotSine1" parent="." unique_id=1777528774 instance=ExtResource("2_nlfnm")]
 Center = Vector2(128, 64)

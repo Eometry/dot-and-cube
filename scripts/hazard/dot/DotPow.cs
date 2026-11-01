@@ -26,14 +26,15 @@ public partial class DotPow : DotBase
 	};
 
 	// ===== 内部变量 =====
-	private float _stepTime;      // 每步（径段）时间，等于 MoveTime + WaitTime
+
+	private int _currentSegIdx;   // 当前径段索引，动点处于 Waypoints[i] 与 Waypoints[i+1] 的区间
 	private int _totalSeg;        // 总径段数，等于数组 _timeScales 的元素个数
 	private int _halfTotalSeg;    // _totalSeg 的一半，仅应用于 BackAndForth 下 start/end-point 的分段计算
 	private float _timeForward;   // 正向时间，仅应用于 BackAndForth，等于半周期
 	private float _timeEffective; // 有效时间，在 BackAndForth 的情况下使用三角波折叠映射进度
-	private int _currentSegIdx;   // 当前径段索引，动点处于 Waypoints[i] 与 Waypoints[i+1] 的区间
-	private float _powScale;      // 预计算幂 Mathf.Pow(2, Power - 1)
 	private float _invMoveTime;   // 预计算 MoveTime 的倒数
+	private float _stepTime;      // 每步（径段）时间，等于 MoveTime + WaitTime
+	private float _powScale;      // 预计算幂 Mathf.Pow(2, Power - 1)
 
 	protected override void Initialize()
 	{
@@ -90,9 +91,9 @@ public partial class DotPow : DotBase
 				float segTime = _timeEffective - _stepTime * _currentSegIdx;
 /*
 插值比例 segProg 为三段分段函数 s(t)，其中 s 为segProg，t 为 segTime / MoveTime，n 为 Power：
-       ┌ 2 ^ (n-1) × t ^ n,    0 ≤ t ≤ 0.5
-s(t) = │ 1 - 0.5 (2 - 2t) ^ n, 0.5 < t ＜ 1
-       └ 1,                    t ≥ 1
+       ┌ 2ⁿ⁻¹ × tⁿ,         0 ≤ t ≤ 0.5
+s(t) = │ 1 - 0.5 (2 - 2t)ⁿ, 0.5 < t ＜ 1
+       └ 1,                 t ≥ 1
 */
 		float segProg;
 		if (segTime <= 0.5f * MoveTime)

@@ -6,7 +6,7 @@ public partial class PlyBase : CharacterBody2D
 	[Export] // 初始生成坐标
 	protected Vector2 SpawnPoint { get; set; } = new(384f, 384f);
 	[Export] // 跳跃持续时间（起跳到落回）
-	protected float JumpTime { get; set; } = 1f;
+	protected float JumpTime { get; set; } = 0.6f;
 
 	// ===== 内部变量 =====
 	protected byte _hp = 3;                 // 生命值
@@ -66,7 +66,7 @@ public partial class PlyBase : CharacterBody2D
 		_jumpProgress = 0f;
 	}
 
-	// 方法：跳跃视觉表现
+	// 方法：跳跃的视觉表现
 	// 缩放函数 s = 2 − (2p − 1)²，p ∈ [0,1] 为跳跃进度
 	// 即 y = −4/t² · (x − t/2)² + 2 的归一化形式：起跳 1 → 最高点 2 → 落回 1
 	private void JumpVfx(double delta)
@@ -95,7 +95,7 @@ public partial class PlyBase : CharacterBody2D
 		if (Input.IsActionPressed("ui_left"))  velocity.X -= 1;
 		if (Input.IsActionPressed("ui_right")) velocity.X += 1;
 		if (Input.IsActionPressed("ui_up"))    velocity.Y -= 1;
-		if (Input.IsActionPressed("ui_down"))  velocity.Y -= 1;
+		if (Input.IsActionPressed("ui_down"))  velocity.Y += 1;
 		if (Input.IsActionJustPressed("confirm&jump")) Jump();
 
 		if (velocity != Vector2.Zero)
