@@ -16,7 +16,7 @@ public partial class DotSine : DotBase
 
 	// ===== 内部变量 =====
 	private Vector2 _dir;          // 方向向量（乘以振幅）
-	private float _omega;          // 三角函数角速度
+	private float _omega;          // 三角函数角频率
 	private float _phaseOffsetRad; // 初相位（弧度制）
 
 	protected override void Initialize()
@@ -29,7 +29,7 @@ public partial class DotSine : DotBase
 		_isValid = true;
 		_period = Period;
 
-		// 计算角速度 ω = 2π / T
+		// 计算角频率 ω = 2π / T
 		_omega = Mathf.Tau / _period;
 		// 初相位弧度
 		_phaseOffsetRad = Mathf.DegToRad(PhaseOffsetDeg);
