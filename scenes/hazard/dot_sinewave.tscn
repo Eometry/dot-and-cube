@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://d3bemwkyfbj44"]
+
+[ext_resource type="PackedScene" uid="uid://bqdsyoy2waoba" path="res://scenes/hazard/dot.tscn" id="1_na7vw"]
+[ext_resource type="Script" uid="uid://ycp7adysepry" path="res://scripts/hazard/dot/DotSinewave.cs" id="2_2i0nt"]
+
+[node name="DotBase" unique_id=1777528774 instance=ExtResource("1_na7vw")]
+script = ExtResource("2_2i0nt")
+Origin = Vector2(128, 128)
+HalfWaveCount = 5
+Amplitude = 128.0
+HalfWaveLength = 64.0
+HalfWavePeriod = 0.75
+InitialLinearProgress = 0.0
+PhaseOffsetDeg = 0.0
+RotationDeg = 0.0
