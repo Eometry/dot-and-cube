@@ -14,7 +14,7 @@ public partial class DotSinewave : DotBase
 	[Export] // 半波周期
 	public float HalfWavePeriod { get; set; } = 0.75f;
 	[Export(PropertyHint.Range, "0.00, 0.99, 0.01")]   // 初线性进程，0 → 原点，0.5 → 折返点
-	public float InitialLinearProgress { get; set; } = 0f;
+	public float InitialLinearProg { get; set; } = 0f;
 	[Export(PropertyHint.Range, "-180.0, 180.0, 0.1")] // 初相位（角度制，作用于 _dirVibration）
 	public float PhaseOffsetDeg { get; set; } = -90f;
 	[Export(PropertyHint.Range, "-180.0, 180.0, 0.1")] // 旋转角度（角度制，作用于 _dirLinear）
@@ -62,15 +62,20 @@ public partial class DotSinewave : DotBase
 		float distLinear = HalfWaveCount * HalfWaveLength;
 		// 方向向量 _dirLinear，与 _dirVibration 垂直，乘以线性距离总长
 		_dirLinear = Vector2.Right.Rotated(Mathf.DegToRad(RotationDeg)) * distLinear;
-		// 初线性位移比例，根据三角波折叠推出分段函数
-		_linearScale = 1f - Mathf.Abs(2f * InitialLinearProgress - 1f);
+		/*
+		初线性位移比例，根据三角波折叠推出分段函数 s(p)：
+		s = ┌ 2p,     0 ≤ p ≤ 0.5
+		    └ 2 - 2p, 0.5 ≤ p ≤ 1
+		这里写成了绝对值形式
+		*/
+		_linearScale = 1f - Mathf.Abs(2f * InitialLinearProg - 1f);
 
 		GlobalPosition = Origin + _dirVibration * initialVibrationFactor + _dirLinear * _linearScale;
 	}
 
     protected override void UpdatePosition()
     {
-		_linearScale = InitialLinearProgress + (float)_time / _period;
+		_linearScale = InitialLinearProg + (float)_time / _period;
 		if (_linearScale > 1f) _linearScale %= 1f;
 		_linearScale = 1f - Mathf.Abs(2f * _linearScale - 1f);
 		GlobalPosition = Origin + _dirVibration * Mathf.Sin((float)(_omega * _time + _phaseOffsetRad)) + _dirLinear * _linearScale;
