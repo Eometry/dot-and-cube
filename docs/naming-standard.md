@@ -17,6 +17,8 @@
 | `idx` | index | 索引 |
 | `prog` | progress | 进度 |
 | `pos` | position | 空间位置 |
+| `vel` | velocity | 速度 |
+| `accel` | acceleration | 加速度 |
 | `seg` | segment | 线段 |
 | `col` | collision | 碰撞（体积） |
 | `rng` | random number generator | 随机数生成器 |
@@ -59,7 +61,7 @@
 | 类 | `PascalCase` | `class DotBase` |
 | 方法 | `PascalCase` | `void UpdateSegIdx()` |
 | Godot 内置虚方法 | `_PascalCase` | `override void _Ready()` |
-| 属性 | `PascalCase` | `[Export] public float Speed` |
+| 导出属性 | `PascalCase` | `[Export] public float Speed` |
 | 节点 | `PascalCase` | `Sprite2D CubeSprite` |
 | 局部变量 | `camelCase` | `int currentSegIdx` |
 | 参数 | `camelCase` | `double delta` |
