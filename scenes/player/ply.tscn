@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://dug87occg1x1a"]
 
+[ext_resource type="Script" uid="uid://bg0ntquwgcgi0" path="res://scripts/player/PlyBase.cs" id="1_chqde"]
 [ext_resource type="Texture2D" uid="uid://di2jabwv2l1rg" path="res://artwork/cube_32.png" id="2_kbsbm"]
-[ext_resource type="Script" uid="uid://bkyt8gxtlhudn" path="res://scripts/player/PlyVelocity.cs" id="2_kiv8a"]
 [ext_resource type="Script" uid="uid://dnk7a7u1e8phl" path="res://scripts/player/PlyCamera.cs" id="3_kbsbm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3owqy"]
 size = Vector2(32, 32)
 
 [node name="Ply" type="CharacterBody2D" unique_id=1250115198]
-script = ExtResource("2_kiv8a")
+script = ExtResource("1_chqde")
 
 [node name="CubeSprite" type="Sprite2D" parent="." unique_id=589242475]
 texture = ExtResource("2_kbsbm")

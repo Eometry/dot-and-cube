@@ -12,7 +12,6 @@ public partial class PlyBase : CharacterBody2D
 	protected byte _hp = 3;                 // 生命值
 	protected bool _isOffGround = false;    // 是否离地
 	protected bool _isInvincible = false;   // 是否无敌
-	protected float _speed = 275f;          // 即时速率
 	protected float _speedMax;              // 最大速率
 	protected float _jumpProgress = 0f;     // 跳跃进度，0 为起跳，1 为落回
 	protected Tween _hurtTween;             // 受击动画 Tween 对象
@@ -32,10 +31,14 @@ public partial class PlyBase : CharacterBody2D
 		// 获取子节点 InnerArea 作为受击碰撞箱
 		var hurtBox = GetNode<Area2D>("InnerArea");
 		hurtBox.AreaEntered += OnPlyHurt;
+		// 移动到出生点
+		GlobalPosition = SpawnPoint;
+		// 图层
+		ZIndex = 511;
 	}
 
 	// 方法：处理玩家受击事件
-	private void OnPlyHurt(Node area)
+	protected void OnPlyHurt(Node area)
 	{
 		if ((area.Name != "HazardArea") || _isInvincible || _isOffGround) return;
 		GD.Print("玩家扣血！！！");
@@ -59,7 +62,7 @@ public partial class PlyBase : CharacterBody2D
 	}
 
 	// 方法：跳跃
-	private void Jump()
+	protected void Jump()
 	{
 		if (_isOffGround) return;
 		_isOffGround = true;
@@ -86,25 +89,5 @@ public partial class PlyBase : CharacterBody2D
 	public override void _Process(double delta)
 	{
 		if (_isOffGround) JumpVfx(delta);
-	}
-
-	public override void _PhysicsProcess(double delta)
-	{
-		Vector2 velocity = Vector2.Zero;
-
-		if (Input.IsActionPressed("ui_left"))  velocity.X -= 1;
-		if (Input.IsActionPressed("ui_right")) velocity.X += 1;
-		if (Input.IsActionPressed("ui_up"))    velocity.Y -= 1;
-		if (Input.IsActionPressed("ui_down"))  velocity.Y += 1;
-		if (Input.IsActionJustPressed("confirm&jump")) Jump();
-
-		if (velocity != Vector2.Zero)
-		{
-			velocity = velocity.Normalized() * _speed;
-		}
-
-		Velocity = velocity;
-
-		MoveAndSlide();
-	}
+	}	
 }
