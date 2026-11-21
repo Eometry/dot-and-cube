@@ -27,7 +27,7 @@ public partial class DotLinear : DotBase
 	private float _accDist;       // 累计距离
 	private float _timeForward;   // 正向时间，仅应用于 BackAndForth，等于半周期
 	private float _timeEffective; // 有效时间，在 BackAndForth 的情况下使用三角波折叠映射进度
-	private int _currentSegIdx;   // 当前线段指数，动点处于 Waypoints[i] 与 Waypoints[i+1] 的区间
+	private int _currentSegIdx;   // 当前线段指数，动点处于 Waypoints[i] 与 Waypoints[i + 1] 的区间
 
 	protected override void Initialize()
 	{

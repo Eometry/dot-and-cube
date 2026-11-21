@@ -7,7 +7,7 @@ public partial class DotExp : DotBase
 	public float MoveTime { get; set; } = 0.5f;
     [Export] // 停顿时间
     public float WaitTime { get; set; } = 0.5f;
-    [Export(PropertyHint.Range, "4.0,12.0,0.2")] // 指数衰减率，f(t) = 1 - 2 ^ (-r × t) 中的 r
+    [Export(PropertyHint.Range, "4.0,12.0,0.2")] // 指数衰减率，f(t) = 1 - 2^(-r × t) 中的 r
     public float DecayRate { get; set; } = 6.0f;
 	// 两种路径模式的枚举
 	public enum PathModes

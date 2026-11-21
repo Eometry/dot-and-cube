@@ -1,22 +1,25 @@
 [gd_scene format=3 uid="uid://tpxst2g888o3"]
 
 [ext_resource type="Texture2D" uid="uid://cwq4fmvfcahr4" path="res://artwork/bg_test.png" id="1_atxtc"]
+[ext_resource type="PackedScene" uid="uid://mocsnblul0ss" path="res://scenes/player/ply_accel.tscn" id="1_wyybw"]
 [ext_resource type="PackedScene" uid="uid://dsqv0vt0g5f2b" path="res://scenes/hazard/dot_sine.tscn" id="2_nlfnm"]
 [ext_resource type="PackedScene" uid="uid://bvdwyy50mdumw" path="res://scenes/hazard/dot_linear.tscn" id="3_hw6vf"]
 [ext_resource type="PackedScene" uid="uid://cjr30nbhi5xqf" path="res://scenes/hazard/dot_ellipse.tscn" id="4_e6vom"]
 [ext_resource type="PackedScene" uid="uid://dv4hfqp7c1wqw" path="res://scenes/hazard/dot_exp.tscn" id="5_e6vom"]
 [ext_resource type="PackedScene" uid="uid://dy3elgqsn0dwb" path="res://scenes/hazard/dot_petal.tscn" id="7_wyybw"]
-[ext_resource type="PackedScene" uid="uid://mocsnblul0ss" path="res://scenes/player/ply_accel.tscn" id="7_y5wqh"]
 
 [node name="TestRoom" type="Node2D" unique_id=1944110412]
+
+[node name="PlyAccel" parent="." unique_id=1250115198 instance=ExtResource("1_wyybw")]
+Accel = 800.0
+Damping = 2.5
 
 [node name="BgTest" type="Sprite2D" parent="." unique_id=2096916248]
 position = Vector2(1024, 1024)
 texture = ExtResource("1_atxtc")
 
-[node name="PlyAccel" parent="." unique_id=1250115198 instance=ExtResource("7_y5wqh")]
-
 [node name="DotSine1" parent="." unique_id=1777528774 instance=ExtResource("2_nlfnm")]
+position = Vector2(733, 465)
 Center = Vector2(128, 64)
 Amplitude = 64.0
 Period = 2.0
@@ -24,6 +27,7 @@ PhaseOffsetDeg = -90.0
 RotationDeg = 0.0
 
 [node name="DotSine2" parent="." unique_id=2122140806 instance=ExtResource("2_nlfnm")]
+position = Vector2(280, 606)
 Center = Vector2(128, 128)
 Amplitude = 64.0
 Period = 2.0
@@ -31,6 +35,7 @@ PhaseOffsetDeg = -70.0
 RotationDeg = 0.0
 
 [node name="DotSine3" parent="." unique_id=382848482 instance=ExtResource("2_nlfnm")]
+position = Vector2(118, 467)
 Center = Vector2(128, 192)
 Amplitude = 64.0
 Period = 2.0
@@ -38,6 +43,7 @@ PhaseOffsetDeg = -50.0
 RotationDeg = 0.0
 
 [node name="DotSine4" parent="." unique_id=381900906 instance=ExtResource("2_nlfnm")]
+position = Vector2(124, 118)
 Center = Vector2(128, 256)
 Amplitude = 64.0
 Period = 2.0
@@ -45,17 +51,19 @@ PhaseOffsetDeg = -30.0
 RotationDeg = 0.0
 
 [node name="DotLinear1" parent="." unique_id=1350052469 instance=ExtResource("3_hw6vf")]
-position = Vector2(0, 1)
+position = Vector2(427, 126)
 Speed = 200.0
 PathMode = 0
 Waypoints = PackedVector2Array(256, 64, 384, 64, 384, 256, 256, 256)
 
 [node name="DotLinear2" parent="." unique_id=1061617771 instance=ExtResource("3_hw6vf")]
+position = Vector2(376, 297)
 Speed = 250.0
 PathMode = 1
 Waypoints = PackedVector2Array(448, 64, 576, 64, 576, 128, 448, 128, 448, 192, 576, 192, 576, 256, 448, 256)
 
 [node name="DotEllipse1" parent="." unique_id=1164868127 instance=ExtResource("4_e6vom")]
+position = Vector2(520, 250)
 OrbitCenter = Vector2(128, 384)
 XRadius = 64.0
 YRadius = 64.0
@@ -64,6 +72,7 @@ InitialAngleDeg = 90.0
 RotationDirection = 1
 
 [node name="DotEllipse2" parent="." unique_id=1614513647 instance=ExtResource("4_e6vom")]
+position = Vector2(95, 247)
 OrbitCenter = Vector2(704, 224)
 XRadius = 64.0
 YRadius = 32.0
@@ -72,6 +81,7 @@ InitialAngleDeg = 0.0
 RotationDirection = 0
 
 [node name="DotExponential1" parent="." unique_id=588298252 instance=ExtResource("5_e6vom")]
+position = Vector2(253, 143)
 MoveTime = 0.75
 WaitTime = 0.5
 DecayRate = 12.0
@@ -79,6 +89,7 @@ PathMode = 1
 Waypoints = PackedVector2Array(640, 64, 704, 64, 768, 64)
 
 [node name="DotExponential2" parent="." unique_id=346804767 instance=ExtResource("5_e6vom")]
+position = Vector2(171, 227)
 MoveTime = 0.75
 WaitTime = 0.5
 DecayRate = 2.0
@@ -86,6 +97,7 @@ PathMode = 0
 Waypoints = PackedVector2Array(640, 128, 704, 128, 768, 128)
 
 [node name="DotPetal1" parent="." unique_id=65810532 instance=ExtResource("7_wyybw")]
+position = Vector2(312, 177)
 Center = Vector2(960, 192)
 PetalCount = 3
 MaxRadius = 128.0
@@ -94,6 +106,7 @@ PhaseOffsetDeg = 0.0
 RotationDeg = -60.0
 
 [node name="DotPetal2" parent="." unique_id=270328898 instance=ExtResource("7_wyybw")]
+position = Vector2(628, 171)
 Center = Vector2(960, 192)
 PetalCount = 3
 MaxRadius = 128.0
@@ -102,6 +115,7 @@ PhaseOffsetDeg = 0.0
 RotationDeg = 60.0
 
 [node name="DotPetal3" parent="." unique_id=875418090 instance=ExtResource("7_wyybw")]
+position = Vector2(382, 181)
 Center = Vector2(960, 192)
 PetalCount = 3
 MaxRadius = 128.0
