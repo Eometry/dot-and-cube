@@ -25,7 +25,7 @@ public partial class PlyBase : CharacterBody2D
 		Initialize();
 	}
 
-	// 方法：初始化（由 _Ready() 调用一次）
+	// 虚方法：初始化（由 _Ready() 调用一次）
 	protected virtual void Initialize()
 	{
 		// 获取子节点 InnerArea 作为受击碰撞箱
@@ -84,6 +84,19 @@ public partial class PlyBase : CharacterBody2D
 		float apexOffset = 2f * _jumpProgress - 1f;      // 离顶点偏移：起跳 -1 → 顶点 0 → 落回 1
 		float scaleValue = 2f - apexOffset * apexOffset; // Scale 缩放倍率：1 → 2 → 1
 		Scale = new(scaleValue, scaleValue);
+	}
+
+	// 方法：处理未消费的输入事件
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (@event.IsActionPressed("confirm&jump")) OnJumpKey();
+	}
+
+	// 虚方法：跳跃键行为
+	protected virtual void OnJumpKey()
+	{
+		// 默认为常规跳跃；PlyPos 覆写为瞬移/跳跃双语义
+		Jump();
 	}
 
 	public override void _Process(double delta)
